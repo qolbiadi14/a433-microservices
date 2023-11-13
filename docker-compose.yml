@@ -1,0 +1,31 @@
+# Menggunakan Docker Compose versi 2 atau lebih.
+version: '2'
+
+services:
+  # Service untuk aplikasi item-app
+  item-app:
+    # Menggunakan image item-app dari docker hub
+    image: qolbiadi14/item-app:v1
+    # Deklarasi port mapping agar bisa diakses dari port 80 di host dan 8080 sebagai port container
+    ports:
+      - "80:8080"
+    # Menentukan bahwa service ini membutuhkan item-db sebelum dijalankan
+    depends_on:
+      - item-db
+    # Menentukan bahwa service ini akan selalu di-restart jika terhenti
+    restart: always   
+
+  # Service untuk database item-db
+  item-db:
+    # Menggunakan image mongo dari dockerhub
+    image: mongo:3
+    # Menggunakan volume bernama app-db untuk menyimpan data database
+    volumes:
+      - app-db:/data/db
+    # Menentukan bahwa service ini akan selalu di-restart jika terhenti
+    restart: always
+    
+
+volumes:
+  app-db:
+  # Definisi volume app-db untuk digunakan oleh item-db
